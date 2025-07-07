@@ -1,7 +1,7 @@
-from github import Github
-import pandas as pd
-import seaborn as sns
-import matplotlib.pyplot as plt
+from github import Github # type: ignore
+import pandas as pd # type: ignore
+import seaborn as sns # type: ignore
+import matplotlib.pyplot as plt # type: ignore
 from datetime import datetime
 import os
 
