@@ -2,7 +2,9 @@ from github import Github # type: ignore
 import pandas as pd # type: ignore
 import seaborn as sns # type: ignore
 import matplotlib.pyplot as plt # type: ignore
-from datetime import datetime
+from matplotlib.colors import LinearSegmentedColormap # type: ignore
+import matplotlib.dates as mdates #type: ignore
+from datetime import datetime, timedelta
 import os
 
 # GitHub personal access token from environment variable
@@ -46,17 +48,33 @@ df['date'] = pd.to_datetime(df['date'])
 df.set_index('date', inplace=True)
 df = df.resample('D').sum().fillna(0)
 
+#only keep last month of data
+today = datetime.utcnow().date()
+one_month_ago = today - timedelta(days=30)
+df = df.loc[one_month_ago:today]
+
 
 # Customise This section for Heatmap Aesthetics
-import matplotlib.dates as mdates
 
-plt.figure(figsize=(14, 2))
-plt.scatter(df.index, [1]*len(df), c=df['commits'], cmap='Greys', s=100, edgecolor='black')
-plt.gca().set_facecolor('none')
-plt.gca().set_yticks([])
-plt.gca().xaxis.set_major_locator(mdates.MonthLocator())
-plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%b'))
+
+colors = ["#f9f9f9", "#d0d0d0", "#909090", "#505050", "#101010"]
+cmap = LinearSegmentedColormap.from_list("custom_greyscale", colors)
+
+# Ensure output directory exists
+os.makedirs('assets', exist_ok=True)
+
+# Plot heatmap
+plt.figure(figsize=(14, 1.5))
+sns.heatmap(
+    df.T, 
+    cmap=cmap, 
+    cbar=False, 
+    linewidths=0.5, 
+    linecolor='blue', 
+    square=True
+)
+plt.axis('off')
 plt.tight_layout()
 plt.savefig('assets/heatmap.png', transparent=True)
-
+plt.close()
 print("main.py Executed Successfully")
