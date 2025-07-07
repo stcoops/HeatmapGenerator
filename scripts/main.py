@@ -46,20 +46,17 @@ df['date'] = pd.to_datetime(df['date'])
 df.set_index('date', inplace=True)
 df = df.resample('D').sum().fillna(0)
 
-# Plot heatmap
+
+# Customise This section for Heatmap Aesthetics
+import matplotlib.dates as mdates
+
 plt.figure(figsize=(14, 2))
-
-# Customise This command for Heatmap Aesthetics
-sns.heatmap(df.T,
-            cmap = "Greys",
-            cbar=False,
-            linewidths = 0.5,
-            linecolor = "white",
-            square = True)
-
-
-plt.title(f'{username}@GitHub')
-plt.axis("off")
+plt.scatter(df.index, [1]*len(df), c=df['commits'], cmap='Greys', s=100, marker='s', edgecolor='black')
+plt.gca().set_facecolor('none')
+plt.gca().set_yticks([])
+plt.gca().xaxis.set_major_locator(mdates.MonthLocator())
+plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%b'))
 plt.tight_layout()
-plt.savefig('assets/heatmap.png')
+plt.savefig('assets/heatmap.png', transparent=True)
+
 print("main.py Executed Successfully")
