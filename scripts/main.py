@@ -26,12 +26,13 @@ for repo in repos:
             commit_dates.append(date)
     except Exception as e:
         print(f"Error fetching commits from {repo.name}: {e}")
+        print("Possible no commits on repo?")
         pass
 
 # Count commits per date
 if not commit_dates:
     print("No commits found.")
-    exit()
+    exit(1)
 
 date_series = pd.Series(commit_dates)
 commit_counts = date_series.value_counts().sort_index()
@@ -49,3 +50,4 @@ sns.heatmap(df.T, cmap="YlOrRd", cbar=False)
 plt.title(f'{username} GitHub Commits Heatmap')
 plt.tight_layout()
 plt.savefig('assets/heatmap.png')
+print("main.py Executed Successfully")
