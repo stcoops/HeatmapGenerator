@@ -48,8 +48,18 @@ df = df.resample('D').sum().fillna(0)
 
 # Plot heatmap
 plt.figure(figsize=(14, 2))
-sns.heatmap(df.T, cmap="YlOrRd", cbar=False)
-plt.title(f'{username} GitHub Commits Heatmap')
+
+# Customise This command for Heatmap Aesthetics
+sns.heatmap(df.T,
+            cmap = "Greys",
+            cbar=False,
+            linewidths = 0.5,
+            linecolor = "white",
+            square = True)
+
+
+plt.title(f'{username}@GitHub')
+plt.axis("off")
 plt.tight_layout()
 plt.savefig('assets/heatmap.png')
 print("main.py Executed Successfully")
