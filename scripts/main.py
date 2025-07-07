@@ -78,7 +78,7 @@ plt.figure(figsize=(10, 2.5))
 sns.heatmap(
     grid_data, 
     cmap=cmap, 
-    cbar=True, 
+    cbar=False, 
     linewidths=0.5, 
     linecolor='black', 
     square=True,
