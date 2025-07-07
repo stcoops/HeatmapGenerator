@@ -1,0 +1,39 @@
+name: Generate All Repo Commit Heatmap
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # 12 AM UTC daily
+    - cron: '0 12 * * *' # 12 PM UTC daily
+  workflow_dispatch:
+
+jobs:
+  generate-heatmap:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Run heatmap script
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: |
+          python scripts/heatmap_all_repos.py
+
+      - name: Commit heatmap image
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add assets/heatmap.png
+          git commit -m "Update all-repo heatmap image"
+          git push
+        continue-on-error: true
