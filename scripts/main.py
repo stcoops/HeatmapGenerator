@@ -82,13 +82,13 @@ sns.heatmap(
     linewidths=0.5, 
     linecolor='black', 
     square=True,
-    cbar_kws={'label': 'Commits per Day'}
+    #cbar_kws={'label': 'Commits per Day'}
 )
 
 # Remove axes and ticks
 plt.xticks([])
 plt.yticks([])
-plt.title(f"{username}'s GitHub Commits (Last 28 Days)", fontsize=14, color='white')
+plt.title("")
 plt.tight_layout()
 plt.savefig('assets/heatmap.png', transparent=True)
 plt.close()
