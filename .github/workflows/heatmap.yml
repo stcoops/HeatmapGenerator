@@ -31,6 +31,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GH_PAT }}
           GH_USERNAME: ${{ env.GH_USERNAME }}
         run: |
+          git config set advice.addIgnoredFile false
           python scripts/main.py
 
       - name: Commit heatmap image
