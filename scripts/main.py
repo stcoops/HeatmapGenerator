@@ -10,7 +10,7 @@ token = os.getenv('GH_TOKEN')
 g = Github(token)
 
 # Your GitHub username
-username = "stcoops"
+username = os.getenv("GH_USERNAME")
 
 # Get all your public repositories
 user = g.get_user()

@@ -27,7 +27,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
-          python scripts/heatmap_all_repos.py
+          python scripts/main.py
 
       - name: Commit heatmap image
         run: |
