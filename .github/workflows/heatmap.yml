@@ -26,6 +26,7 @@ jobs:
       - name: Run heatmap script
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          GH_USERNAME: ${{ environment.GH_USERNAME }}
         run: |
           python scripts/main.py
 
