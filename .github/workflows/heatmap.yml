@@ -4,6 +4,9 @@ on:
   schedule:
     - cron: '0 0 * * *'  # 12 AM UTC daily
     - cron: '0 12 * * *' # 12 PM UTC daily
+  push:
+    # only trigger on branches, not on tags
+    branches: '**'
   workflow_dispatch:
 
 jobs:
