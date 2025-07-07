@@ -1,11 +1,12 @@
 from github import Github # type: ignore
 import pandas as pd # type: ignore
 import seaborn as sns # type: ignore
-import matplotlib.pyplot as plt # type: ignore
+import matplotlib.pyplot as plt # type: ignore 
 from matplotlib.colors import LinearSegmentedColormap # type: ignore
 import matplotlib.dates as mdates #type: ignore
 from datetime import datetime, timedelta
 import os
+import numpy as np #type: ignore
 
 # GitHub personal access token from environment variable
 token = os.getenv('GH_TOKEN')
@@ -53,28 +54,46 @@ today = datetime.utcnow().date()
 one_month_ago = today - timedelta(days=30)
 df = df.loc[one_month_ago:today]
 
+# Prepare data for grid layout
+# Fill missing days
+all_days = pd.date_range(start=one_month_ago, end=today)
+df = df.reindex(all_days, fill_value=0)
 
-# Customise This section for Heatmap Aesthetics
+# Reshape data into weekly grid
+n_days = len(df)
+n_cols = 7  # 7 days a week
+n_rows = int(np.ceil(n_days / n_cols))
 
+# Pad with NaNs if necessary to fill the grid
+pad_size = n_cols * n_rows - n_days
+commit_values = np.append(df['commits'].values, [np.nan] * pad_size)
+grid_data = commit_values.reshape(n_rows, n_cols)
 
-colors = ["#f9f9f9", "#d0d0d0", "#909090", "#505050", "#101010"]
-cmap = LinearSegmentedColormap.from_list("custom_greyscale", colors)
+# Custom blue gradient colormap
+colors = ["#f0f8ff", "#add8e6", "#4682b4", "#003366"]
+cmap = LinearSegmentedColormap.from_list("custom_blues", colors)
 
 # Ensure output directory exists
 os.makedirs('assets', exist_ok=True)
 
-# Plot heatmap
-plt.figure(figsize=(14, 1.5))
+# Plot grid heatmap
+plt.figure(figsize=(12, n_rows * 0.6))
 sns.heatmap(
-    df.T, 
+    grid_data, 
     cmap=cmap, 
-    cbar=False, 
+    cbar=True, 
     linewidths=0.5, 
-    linecolor='blue', 
-    square=True
+    linecolor='white', 
+    square=True,
+    cbar_kws={'label': 'Commits per Day'}
 )
-plt.axis('off')
+
+# Remove axes and ticks
+plt.xticks([])
+plt.yticks([])
+plt.title(f"{username}'s Commit Activity (Last 30 Days)", fontsize=14)
 plt.tight_layout()
 plt.savefig('assets/heatmap.png', transparent=True)
 plt.close()
-print("main.py Executed Successfully")
+
+print("Blue gradient commit heatmap with legend generated successfully.")
