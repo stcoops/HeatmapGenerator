@@ -51,7 +51,7 @@ df = df.resample('D').sum().fillna(0)
 import matplotlib.dates as mdates
 
 plt.figure(figsize=(14, 2))
-plt.scatter(df.index, [1]*len(df), c=df['commits'], cmap='Greys', s=100, marker='s', edgecolor='black')
+plt.scatter(df.index, [1]*len(df), c=df['commits'], cmap='Greys', s=100, edgecolor='black')
 plt.gca().set_facecolor('none')
 plt.gca().set_yticks([])
 plt.gca().xaxis.set_major_locator(mdates.MonthLocator())
