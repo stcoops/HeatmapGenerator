@@ -2,3 +2,4 @@ PyGithub
 pandas
 seaborn
 matplotlib
+numpy
