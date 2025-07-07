@@ -26,6 +26,7 @@ for repo in repos:
             commit_dates.append(date)
     except Exception as e:
         print(f"Error fetching commits from {repo.name}: {e}")
+        pass
 
 # Count commits per date
 if not commit_dates:
