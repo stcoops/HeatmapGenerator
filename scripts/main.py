@@ -47,43 +47,40 @@ df = commit_counts.reset_index()
 df.columns = ['date', 'commits']
 df['date'] = pd.to_datetime(df['date'])
 df.set_index('date', inplace=True)
-df = df.resample('D').sum().fillna(0)
+#df = df.resample('D').sum().fillna(0)
 
-#only keep last month of data
+# Only keep last 28 days
 today = datetime.utcnow().date()
-one_month_ago = today - timedelta(days=30)
-df = df.loc[one_month_ago:today]
+days_ago_28 = today - timedelta(days=27)
+df = df.resample('D').sum().fillna(0)
+df = df.loc[days_ago_28:today]
 
 # Prepare data for grid layout
-# Fill missing days
-all_days = pd.date_range(start=one_month_ago, end=today)
+all_days = pd.date_range(start=days_ago_28, end=today)
 df = df.reindex(all_days, fill_value=0)
 
-# Reshape data into weekly grid
-n_days = len(df)
-n_cols = 7  # 7 days a week
-n_rows = int(np.ceil(n_days / n_cols))
+# Reshape data into 4x7 grid (4 weeks, 7 days per week)
+commit_values = df['commits'].values
+grid_data = commit_values.reshape(4, 7)
 
-# Pad with NaNs if necessary to fill the grid
-pad_size = n_cols * n_rows - n_days
-commit_values = np.append(df['commits'].values, [np.nan] * pad_size)
-grid_data = commit_values.reshape(n_rows, n_cols)
-
-# Custom blue gradient colormap
-colors = ["#f0f8ff", "#add8e6", "#4682b4", "#003366"]
-cmap = LinearSegmentedColormap.from_list("custom_blues", colors)
+# Custom blue gradient colormap for dark mode
+colors = ["#001f3f", "#0074D9", "#7FDBFF", "#FFFFFF"]
+cmap = LinearSegmentedColormap.from_list("custom_blues_dark", colors)
 
 # Ensure output directory exists
 os.makedirs('assets', exist_ok=True)
 
-# Plot grid heatmap
-plt.figure(figsize=(12, n_rows * 0.6))
+# Dark background setup
+plt.style.use('dark_background')
+
+# Plot heatmap
+plt.figure(figsize=(10, 2.5))
 sns.heatmap(
     grid_data, 
     cmap=cmap, 
     cbar=True, 
     linewidths=0.5, 
-    linecolor='white', 
+    linecolor='black', 
     square=True,
     cbar_kws={'label': 'Commits per Day'}
 )
@@ -91,9 +88,9 @@ sns.heatmap(
 # Remove axes and ticks
 plt.xticks([])
 plt.yticks([])
-plt.title(f"{username}'s Commit Activity (Last 30 Days)", fontsize=14)
+plt.title(f"{username}'s GitHub Commits (Last 28 Days)", fontsize=14, color='white')
 plt.tight_layout()
 plt.savefig('assets/heatmap.png', transparent=True)
 plt.close()
 
-print("Blue gradient commit heatmap with legend generated successfully.")
+print("main.py executed successfully.")
