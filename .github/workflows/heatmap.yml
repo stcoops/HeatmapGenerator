@@ -45,4 +45,3 @@ jobs:
           git commit -m "Update all-repo heatmap image" || echo "No changes to commit"
           git pull --rebase origin main
           git push origin main
-          continue-on-error: true
