@@ -26,6 +26,16 @@ jobs:
         run: |
           pip install -r requirements.txt
 
+      - name: Set up Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+      
+      - name: Pull latest changes
+        run: |
+          git fetch origin main
+          git rebase origin/main
+
       - name: Run heatmap script
         env:
           GH_TOKEN: ${{ secrets.GH_PAT }}
