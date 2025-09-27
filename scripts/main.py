@@ -64,7 +64,7 @@ commit_values = df['commits'].values
 grid_data = commit_values.reshape(4, 7)
 
 # Custom blue gradient colormap for dark mode
-colors = [ "#103092","#0074D9", "#0B9CD1", "#1F9FF4"]
+colors = [ "#103091","#0074D9", "#0B9CD1", "#1F9FF4"]
 cmap = LinearSegmentedColormap.from_list("custom_blues_dark", colors)
 
 # Ensure output directory exists
