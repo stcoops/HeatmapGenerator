@@ -43,11 +43,15 @@ jobs:
         run: |
           python scripts/main.py
 
-      - name: Commit heatmap image
+      - name: Fetch and Rebase Repo
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
+          git fetch origin main
+          git rebase origin/main
+      -  name: Commit new Heatmap
+         run: |
           git add assets/heatmap.png
           git commit -m "Update all-repo heatmap image"
           git push
-        continue-on-error: true
+          continue-on-error: true
