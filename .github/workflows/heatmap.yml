@@ -31,10 +31,6 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
       
-      - name: Pull latest changes
-        run: |
-          git fetch origin main
-          git rebase origin/main
 
       - name: Run heatmap script
         env:
@@ -43,15 +39,10 @@ jobs:
         run: |
           python scripts/main.py
 
-      - name: Fetch and Rebase Repo
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git fetch origin main
-          git rebase origin/main
       -  name: Commit new Heatmap
          run: |
           git add assets/heatmap.png
-          git commit -m "Update all-repo heatmap image"
-          git push
+          git commit -m "Update all-repo heatmap image" || echo "No changes to commit"
+          git pull --rebase origin main
+          git push origin main
           continue-on-error: true
